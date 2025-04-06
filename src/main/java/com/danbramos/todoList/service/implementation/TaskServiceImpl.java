@@ -5,8 +5,10 @@ import com.danbramos.todoList.repository.TaskRepository;
 import com.danbramos.todoList.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -33,10 +35,22 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public Task updateEntity(Long id, Task entity) {
-        if (repository.existsById(id)) {
-            entity.setId(id);
-            return repository.save(entity);
+        Optional<Task> existingTaskOpt = repository.findById(id);
+        if (existingTaskOpt.isPresent()) {
+            Task existingTask = existingTaskOpt.get();
+            
+            // Set properties from the input entity
+            existingTask.setTitle(entity.getTitle());
+            existingTask.setDescription(entity.getDescription());
+            existingTask.setCompleted(entity.getCompleted());
+            existingTask.setDueDate(entity.getDueDate());
+            existingTask.setPriority(entity.getPriority());
+            existingTask.setTags(entity.getTags());
+            
+            // The version will be handled automatically by Hibernate
+            return repository.save(existingTask);
         }
         return null;
     }

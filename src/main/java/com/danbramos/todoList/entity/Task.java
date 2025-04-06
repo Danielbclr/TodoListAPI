@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,7 @@ public class Task {
 
     private String title;
     private String description;
-    private String status;
+    private boolean completed;
     private Date createdDate;
     private Date dueDate;
     private String priority;
@@ -46,12 +47,12 @@ public class Task {
         this.description = description;
     }
 
-    public String getStatus() {
-        return status;
+    public boolean getCompleted() {
+        return completed;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public Date getCreatedDate() {
@@ -85,6 +86,5 @@ public class Task {
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
-
 
 }
